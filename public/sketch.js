@@ -1,5 +1,6 @@
 let socket = io()
 
+let count = 0
 let chatbox;
 let name
 let send;
@@ -8,16 +9,14 @@ function setup(){
 createCanvas(0, 0);
 name = createInput("Name")
 name.size(100)
-an = createButton("Anonymous")
-an.size(100)
-an.mousePressed(incognito)
 chatbox = createInput("Message");
 chatbox.size = (windowWidth-150)
 send = createButton("✈");
 send.size(50)
-send.mousePressed(recieved)
-socket.on("call", getmsg)
-
+send.mousePressed(sendmsg)
+socket.on("call", (data)=>{getmsg(data)})
+chatbox.id("msg")
+name.id("name")
 }
 function incognito(){
   name.value("-")
@@ -28,21 +27,15 @@ background(0);
 }
 
 function getmsg(data){
-createDiv("sidrdsk")
+  //Recieve message
+  d = createDiv(data.rname+": "+data.rtext)
 }
 
-function recieved(){
-  if(name.value=="-"){
-  data = {
-    msg: chatbox.value(),
-    name: socket.id
+function sendmsg(){
+  //Send message
+  message = {
+    rtext: chatbox.value(),
+    rname: name.value()
   }
-}
-else{
-data = {
-    msg:chatbox.value(),
-    name:name.value()
-  }
-}
-  socket.emit("sent", data)
+  socket.emit("sent", message)
 }

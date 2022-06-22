@@ -14,7 +14,7 @@ server.listen(port, ()=>{console.log("Server is up on "+port)});
 io.on("connection", (socket)=>{
     console.log(socket.id+" just joined.")
     socket.on("disconnect", ()=>{console.log(socket.id+" has left.")});
-socket.on("sent", ()=>{
-    socket.emit("call")
+socket.on("sent", (data)=>{
+io.emit("call", data)
 })
 })
